@@ -2,6 +2,7 @@ package me.kall.onelastbattle;
 
 import me.kall.onelastbattle.ext.IDamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,6 +18,8 @@ public final class OneLastBattle {
         LivingEntity entity = event.getEntity();
         float amount = event.getAmount();
         if (amount < entity.getHealth() || entity.level().isClientSide()) return;
-        IDamageSource.setSuicide(entity, event.getSource());
+        if (entity instanceof OwnableEntity && ((OwnableEntity) entity).getOwner() != null) {
+            IDamageSource.setSuicide(entity, event.getSource());
+        }
     }
 }
